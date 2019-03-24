@@ -17,6 +17,7 @@ use yii\data\ActiveDataProvider;
 use yii\db\Query;
 use backend\models\Cart;
 use backend\models\Products;
+use backend\models\Orders;
 
 /**
  * Site controller
@@ -133,6 +134,9 @@ class SiteController extends Controller {
      * @return mixed
      */
     public function actionIndex() {
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect('login');
+        }
         $session = Yii::$app->session;
         $lang_id = $session['language_id'];
         return $this->render('index');
@@ -144,10 +148,13 @@ class SiteController extends Controller {
      * @return mixed
      */
     public function actionCart() {
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect('/login');
+        }
         $session = Yii::$app->session;
         $lang_id = $session['language_id'];
         $user_id = $created = Yii::$app->user->identity->id;
-        $cart = Cart::find()->select(['cart.*'])->leftJoin('products', '`products`.`id` = `cart`.`product_id`')->where(['cart.user_id' => $user_id])->with('products')->all();
+        $cart = Cart::find()->select(['cart.*'])->leftJoin('products', '`products`.`id` = `cart`.`product_id`')->where(['cart.user_id' => $user_id])->andWhere(['cart.status' => 1])->with('products')->all();
 //        die(var_dump($cart[0]['products']));
         return $this->render('cart', [
                     'cart' => $cart,
@@ -185,7 +192,7 @@ class SiteController extends Controller {
         }
 
         $id = $_GET['id'];
-        $user_id = (int)Yii::$app->user->identity->id;
+        $user_id = (int) Yii::$app->user->identity->id;
         $getCartDetails = Cart::find()->where(['user_id' => $user_id])->andWhere(['status' => 1])->one();
         if (sizeof($getCartDetails) > 0) {
             $model->cart_alias = $getCartDetails['cart_alias'];
@@ -201,7 +208,101 @@ class SiteController extends Controller {
         if ($model->save()) {
             return $this->redirect(['cart']);
         } else {
-            die(var_dump($model->errors));
+            return $this->redirect(['cart']);
+        }
+    }
+
+    public function beforeAction($action) {
+        $this->enableCsrfValidation = false;
+        return parent::beforeAction($action);
+    }
+
+    /**
+     * Displays update-cart.
+     *
+     * @return mixed
+     */
+    public function actionUpdateCart() {
+        $i = 0;
+        if (isset($_POST)) {
+//            die(var_dump($_POST));
+            foreach ($_POST as $dataDetails => $data) {
+                $model = new Cart();
+                $quantity = $data['itemQuantity_' . $i];
+                $id = $data['id_' . $i];
+                $itemID = $data['itemID_' . $i];
+                $modelCart = Cart::findOne($id);
+                $getProduct = Products::find()->where(['id' => $itemID])->one();
+//                die($getProduct['store_quantity'] . "lol");
+                if ($quantity < $getProduct['store_quantity']) {
+                    $modelCart->quantity = $quantity;
+                    if (!$modelCart->save()) {
+                        die(var_dump($modelCart->errors));
+                    }
+                }
+                $i++;
+            }
+            return $this->redirect('/cart');
+        } else {
+            return $this->redirect('/cart');
+        }
+    }
+
+    /**
+     * Displays Checkout.
+     *
+     * @return mixed
+     */
+    public function actionCheckout() {
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect('/login');
+        }
+
+        if (isset($_POST['Orders']['cart_alias'])) {
+            die(var_dump($_POST));
+        } else {
+            $session = Yii::$app->session;
+            $lang_id = $session['language_id'];
+            $user_id = $created = Yii::$app->user->identity->id;
+            $cart = Cart::find()->select(['cart.*'])->leftJoin('products', '`products`.`id` = `cart`.`product_id`')->where(['cart.user_id' => $user_id])->andWhere(['cart.status' => 1])->with('products')->all();
+            return $this->render('checkout', [
+                        'cart' => $cart,
+            ]);
+        }
+    }
+
+    /**
+     * Displays submit-checkout.
+     *
+     * @return mixed
+     */
+    public function actionSubmitCheckout() {
+        if (isset($_POST)) {
+            $cartDetails = Cart::find()->where(['cart_alias' => $_POST['Orders']['cart_alias']])->all();
+            foreach ($cartDetails as $carts => $cart) {
+                $getItem = Products::find()->where(['id' => $cart['product_id']])->one();
+                $modelProduct = Products::findOne($cart['product_id']);
+                $modelProduct->name = $getItem['name'];
+                $modelProduct->price = $getItem['price'];
+                $modelProduct->store_quantity = $getItem['store_quantity'] - $cart['quantity'];
+                if (!$modelProduct->save()) {
+                    return $this->redirect('/');
+                }
+            }
+            Cart::updateAll(['status' => 2], ['and', ['cart_alias' => $_POST['Orders']['cart_alias']]]);
+            $model = new Orders();
+            $model->cart_alias = $_POST['Orders']['cart_alias'];
+            $model->total_amount = $_POST['Orders']['total_amount'];
+            $model->user_id = Yii::$app->user->identity->id;
+            $model->username = $_POST['Orders']['name'];
+            $model->user_email = $_POST['Orders']['email'];
+            $model->user_phone = $_POST['Orders']['phone'];
+            $model->user_address = $_POST['Orders']['address'];
+            $model->date_created = time();
+            $model->save();
+            return $this->redirect('/');
+        } else {
+            return $this->redirect('/');
         }
     }
 
@@ -272,6 +373,8 @@ class SiteController extends Controller {
         if ($model->load(Yii::$app->request->post())) {
             $post = Yii::$app->request->post();
 
+            $model->admin = 20;
+            $model->phone = '0799204541';
             if (isset($mode->username)) {
                 $model->username = $model->username;
             } else {
@@ -290,7 +393,7 @@ class SiteController extends Controller {
 
             if ($user = $model->signup()) {
                 if (Yii::$app->getUser()->login($user)) {
-                    return $this->redirect('/profile');
+                    return $this->redirect('/index');
                 }
             }
         }

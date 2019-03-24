@@ -12,9 +12,11 @@ use yii\bootstrap\ActiveForm;
 use frontend\models\SignupForm;
 use backend\models\Cart;
 
-$user_id = $created = Yii::$app->user->identity->id;
+if (!Yii::$app->user->isGuest) {
+    $user_id = $created = Yii::$app->user->identity->id;
+    $getCartData = Cart::find()->where(['user_id' => $user_id])->andWhere(['status' => 1])->count();
+}
 
-$getCartData = Cart::find()->where(['user_id' => $user_id])->andWhere(['status' => 1])->count();
 
 $session = Yii::$app->session;
 $lang_id = $session['language_id'];
@@ -86,15 +88,19 @@ AppAsset::register($this);
                                             <li><a href="#">INR – India Rupee</a></li>
                                         </ul>
                                     </li>
-                                    <li class="top_links"><a href="#">My Account <i class="ion-chevron-down"></i></a>
+                                    <?php if (Yii::$app->user->isGuest) { ?>
+                                    <li class="top_links">
+                                        <a href="/login" data-method="post" class="btn btn-default btn-flat">Login</a>
+                                    </li> 
+                                    <?php }else { ?>
+                                    <li class="top_links"><a href="#"><?= $user_id = $created = Yii::$app->user->identity->username; ?> <i class="ion-chevron-down"></i></a>
                                         <ul class="dropdown_links">
-                                            <li><a href="#">Checkout </a></li>
-                                            <li><a href="#">My Account </a></li>
-                                            <li><a href="/cart">Shopping Cart</a></li>
-                                            <li><a href="#">Wishlist</a></li>
+                                            <li>
+                                                <a href="/backend/web/site/logout" data-method="post" class="btn btn-default btn-flat">Logout</a>
+                                            </li>
                                         </ul>
                                     </li> 
-
+                                    <?php } ?>
 
 
                                 </ul>
@@ -141,7 +147,11 @@ AppAsset::register($this);
                                 </div>
                                 <div class="cart_link">
                                     <a href="/cart"><i class="ion-android-cart"></i>
-                                    <span class="cart_quantity"><?php echo $getCartData ?></span>
+                                        <?php if (!Yii::$app->user->isGuest) { ?>
+                                            <span class="cart_quantity"><?php echo $getCartData ?></span>
+                                        <?php } else { ?>
+                                            <span class="cart_quantity">0</span>                              
+                                        <?php } ?>
                                     </a>
                                     <!--mini cart-->
 
@@ -205,7 +215,7 @@ AppAsset::register($this);
         <!--footer area start-->
         <footer class="footer_widgets">
             <div class="container">  
-                
+
                 <div class="footer_middel">
                     <div class="row">
                         <div class="col-12">

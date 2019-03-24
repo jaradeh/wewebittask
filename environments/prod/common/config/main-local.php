@@ -3,7 +3,7 @@ return [
     'components' => [
         'db' => [
             'class' => 'yii\db\Connection',
-            'dsn' => 'mysql:host=localhost;dbname=arizona',
+            'dsn' => 'mysql:host=localhost;dbname=wewebit',
             'username' => 'root',
             'password' => '',
             'charset' => 'utf8',

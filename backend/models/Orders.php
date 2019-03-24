@@ -3,6 +3,9 @@
 namespace backend\models;
 
 use Yii;
+use backend\models\User;
+use backend\models\Cart;
+use backend\models\Products;
 
 /**
  * This is the model class for table "orders".
@@ -17,21 +20,19 @@ use Yii;
  * @property string $user_address
  * @property integer $date_created
  */
-class Orders extends \yii\db\ActiveRecord
-{
+class Orders extends \yii\db\ActiveRecord {
+
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'orders';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['cart_alias', 'total_amount', 'user_id', 'username', 'user_email', 'user_phone', 'user_address', 'date_created'], 'required'],
             [['total_amount', 'user_id', 'date_created'], 'integer'],
@@ -42,8 +43,7 @@ class Orders extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'id' => 'ID',
             'cart_alias' => 'Cart Alias',
@@ -56,4 +56,17 @@ class Orders extends \yii\db\ActiveRecord
             'date_created' => 'Date Created',
         ];
     }
+
+    public function getUser() {
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+    
+    public function getCart() {
+        return $this->hasMany(Cart::className(), ['cart_alias' => 'cart_alias']);
+    }
+    
+    public function getProducts() {
+        return $this->hasMany(Products::className(), ['id' => 'id']);
+    }
+
 }

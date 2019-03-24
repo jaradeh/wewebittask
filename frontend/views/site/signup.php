@@ -33,7 +33,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             <div class="lable">Name <span>*</span></div>
                             <p class="comment-form-author">
                                 <?= $form->field($model, 'username')->textInput(['maxlength' => 30, 'class' => 'form-control heigh_47'])->label(false); ?>
-                                <input type="hidden" name="SignupForm[home_signup]" value="0">
                             </p>
                         </div>
                         <div class="col-md-12">

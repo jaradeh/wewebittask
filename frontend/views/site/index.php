@@ -93,7 +93,11 @@ $getProducts = Products::find()->all();
                                                 </div>
                                                 <div class="action_links">
                                                     <ul>
-                                                        <li class="add_to_cart"><a href="/add-cart?id=<?php echo $product['id'] ?>" title="" data-original-title="add to cart">add to cart</a></li>
+                                                        <?php if ($product['store_quantity'] > 0) { ?>
+                                                            <li class="add_to_cart"><a href="/add-cart?id=<?php echo $product['id'] ?>" title="" data-original-title="add to cart">add to cart</a></li>
+                                                        <?php } else { ?>
+                                                            <li class="add_to_cart"><p title="" class="alert alert-danger text-danger" data-original-title="out of stock">Out of stock</p></li>
+                                                        <?php } ?>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -140,7 +144,11 @@ $getProducts = Products::find()->all();
 
                                             <div class="action_links">
                                                 <ul>
-                                                    <li class="add_to_cart"><a href="/add-cart?id=<?php echo $product['id'] ?>" title="" data-original-title="add to cart">add to cart</a></li>
+                                                    <?php if ($product['store_quantity'] > 0) { ?>
+                                                        <li class="add_to_cart"><a href="/add-cart?id=<?php echo $product['id'] ?>" title="" data-original-title="add to cart">add to cart</a></li>
+                                                    <?php } else { ?>
+                                                        <li class="add_to_cart"><p title="" class="alert alert-danger text-danger" data-original-title="out of stock">Out of stock</p></li>
+                                                        <?php } ?>
                                                 </ul>
                                             </div>
                                         </div>

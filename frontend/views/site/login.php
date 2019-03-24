@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="col-md-12">
                             <div class="contact-bg">                 
                                 <h2>Login</h2>
-                                <p>Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum.</p>
+                                <a href="/signup">Not a member yet ? create account here </a>
                             </div> 
                         </div>
                         <div class="col-md-12">
