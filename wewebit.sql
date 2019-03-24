@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Mar 23, 2019 at 01:22 PM
+-- Generation Time: Mar 24, 2019 at 09:59 AM
 -- Server version: 5.7.19
 -- PHP Version: 7.0.23
 
@@ -63,16 +63,31 @@ CREATE TABLE IF NOT EXISTS `cart` (
   `status` int(25) NOT NULL,
   `date_created` int(25) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=24 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `cart`
 --
 
 INSERT INTO `cart` (`id`, `user_id`, `cart_alias`, `product_id`, `quantity`, `status`, `date_created`) VALUES
-(7, 1, 'zpZNZkm80A', 2, 1, 1, 1553344377),
-(6, 1, 'zpZNZkm80A', 1, 1, 1, 1553344335),
-(8, 1, 'zpZNZkm80A', 2, 1, 1, 1553344495);
+(7, 1, 'zpZNZkm80A', 2, 1, 2, 1553344377),
+(6, 1, 'zpZNZkm80A', 1, 1, 2, 1553344335),
+(8, 1, 'zpZNZkm80A', 2, 1, 2, 1553344495),
+(9, 1, '5EKiOzpnTs', 2, 1, 2, 1553393545),
+(10, 1, '5EKiOzpnTs', 2, 1, 2, 1553393554),
+(11, 1, 'A9y9hdvZVF', 2, 1, 2, 1553393633),
+(12, 1, 'A9y9hdvZVF', 2, 1, 2, 1553393641),
+(13, 1, '8cGNTbKxwt', 2, 1, 2, 1553393955),
+(14, 1, '8cGNTbKxwt', 1, 1, 2, 1553393958),
+(15, 1, 'ESmyv3fnTL', 2, 1, 2, 1553394038),
+(16, 1, 'ESmyv3fnTL', 1, 1, 2, 1553394042),
+(17, 1, 'xqUf4E9dbw', 2, 1, 2, 1553394087),
+(18, 1, 'xqUf4E9dbw', 1, 1, 2, 1553394091),
+(19, 1, 'TX2QSrbaeA', 2, 1, 2, 1553394190),
+(20, 1, 'rudfsJ2bKq', 1, 1, 2, 1553394507),
+(21, 1, 'rudfsJ2bKq', 2, 1, 2, 1553394511),
+(22, 1, 'aFiam3y1Oa', 2, 12, 2, 1553394536),
+(23, 1, 'aFiam3y1Oa', 1, 1, 2, 1553394543);
 
 -- --------------------------------------------------------
 
@@ -136,7 +151,24 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `user_address` varchar(255) CHARACTER SET utf8 NOT NULL,
   `date_created` int(25) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`id`, `cart_alias`, `total_amount`, `user_id`, `username`, `user_email`, `user_phone`, `user_address`, `date_created`) VALUES
+(1, 'zpZNZkm80A', 3434, 1, 'Alaa', 'alaa.jaradeh@gmail.com', '0799204541', 'Amman', 123),
+(2, 'zpZNZkm80A2', 3434, 1, 'Alaa', 'admin@gmail.com', '0799204541', 'Amman', 123),
+(3, 'zpZNZkm80A', 3434, 1, 'Alaa Jaradeh', 'alaa.jaradeh@gmail.com', '0799204541', 'Amman - Jordan', 1553393508),
+(4, '5EKiOzpnTs', 1508, 1, 'Alaa Jaradeh', 'info@alaajaradeh.com', '0799204541', 'Amman - Jordan', 1553393566),
+(5, 'A9y9hdvZVF', 1508, 1, 'Alaa Jaradeh', 'info@alaajaradeh.com', '0799204541', 'Amman - Jordan', 1553393936),
+(6, '8cGNTbKxwt', 2680, 1, 'Alaa Jaradeh', 'info@alaajaradeh.com', '0799204541', 'Amman - Jordan', 1553393968),
+(7, 'ESmyv3fnTL', 2680, 1, 'Alaa Jaradeh', 'info@alaajaradeh.com', '0799204541', 'Amman - Jordan', 1553394075),
+(8, 'xqUf4E9dbw', 2680, 1, 'Alaa Jaradeh', 'info@alaajaradeh.com', '0799204541', 'Amman - Jordan', 1553394099),
+(9, 'TX2QSrbaeA', 754, 1, 'Alaa Jaradeh', 'info@alaajaradeh.com', '0799204541', 'Amman - Jordan', 1553394484),
+(10, 'rudfsJ2bKq', 2680, 1, 'Alaa Jaradeh', 'info@alaajaradeh.com', '0799204541', 'Amman - Jordan', 1553394519),
+(11, 'aFiam3y1Oa', 2680, 1, 'Alaa Jaradeh', 'info@alaajaradeh.com', '0799204541', 'Amman - Jordan', 1553419986);
 
 -- --------------------------------------------------------
 
@@ -160,8 +192,8 @@ CREATE TABLE IF NOT EXISTS `products` (
 --
 
 INSERT INTO `products` (`id`, `name`, `image`, `store_quantity`, `sku`, `price`) VALUES
-(1, 'Alienware laptop', '1553308376_s0tIhddgXDqpUZt4Y9G32tzspYFxcQTF.jpg', 12, 'B350', 1660),
-(2, 'Apple iphone X', '1553308440_rwm64oym5DFS7E1WEwVNxqhhdQrdn9la.png', 25, 'A125', 650);
+(1, 'Alienware laptop', '1553308376_s0tIhddgXDqpUZt4Y9G32tzspYFxcQTF.jpg', 3, 'B350', 1660),
+(2, 'Apple iphone X', '1553308440_rwm64oym5DFS7E1WEwVNxqhhdQrdn9la.png', 11, 'A125', 650);
 
 -- --------------------------------------------------------
 
@@ -190,7 +222,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `password_reset_token` (`password_reset_token`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `user`
@@ -200,7 +232,8 @@ INSERT INTO `user` (`id`, `username`, `path`, `auth_key`, `password_hash`, `pass
 (1, 'admin1', '1.jpg', '', '$2y$13$88ZSgb0kLQOuRPWmJ/v5.uTadXQ8OAXsX6tpXxOXACEJCxgrt537y', 'admin1', NULL, 'admin@kidzmenia.com', '', 10, 1, 20, 20, 1493417801, 0),
 (9, 'alaa.jaradeh', '', '1HbFG9VeAIqRc3MFtcPRkzgSn4QpymFC', '$2y$13$rKrDVvXJ0NjA4etLyoHpueEwDoTdjgisdnFrcJTtrJdhkMUGwYROO', 'alaa.jaradeh', NULL, 'alaa.jaradeh@gmail.com', '', 10, 1, 10, 10, 1503428920, 1503428920),
 (10, 'test', 'None', 'IRjSuYx0iXf4yxpSLGVxduEIuIOKE2i5', '$2y$13$SFNdRnxPJV.z7/i996PjK.8X9pu2rhNFFFh8QkEZIHeGmuV.LhTPi', 'jaradea', NULL, 'alaa.jaradeha@gmail.com', '', 10, 1, 10, 10, 1533673701, 1533673701),
-(11, 'test2', 'None', 'WNPCxDerXnzu5qQFFfOqmXcsCdqbRdnC', '$2y$13$RjaQcXwn96dxpsuxPOkWx.Dq5.lF2mhklV5N1WEmWzb6aplw00OGe', 'jaradea', NULL, 'alaa.jaradeh2@gmail.com', '', 10, 1, 20, 10, 1533673712, 1533673712);
+(11, 'test2', 'None', 'WNPCxDerXnzu5qQFFfOqmXcsCdqbRdnC', '$2y$13$RjaQcXwn96dxpsuxPOkWx.Dq5.lF2mhklV5N1WEmWzb6aplw00OGe', 'jaradea', NULL, 'alaa.jaradeh2@gmail.com', '', 10, 1, 20, 10, 1533673712, 1533673712),
+(12, 'admin2', 'None', 'f1TBUDOKTDLmGA9U6dKAy-Y3Bm29guOk', '$2y$13$CH1Jamx6nskXH6DUuOGsj.InU9Fhros9OEFvLR19NzbXUIy5NjGGm', 'admin2', NULL, 'admin2@gmail.com', '0799204541', 10, 1, 20, 10, 1553388364, 1553388364);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
